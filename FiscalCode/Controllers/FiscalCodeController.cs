@@ -50,25 +50,25 @@ namespace FiscalCode.Controllers
         /// <summary>
         /// Ritorna il codice fiscale della persona
         /// </summary>
-        /// <param name="pPerson">Persona corrente</param>
+        /// <param name="person">Persona corrente</param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Post([FromBody] Person pPerson)
+        public IActionResult Post([FromBody] Person person)
         {
             try
             {
                 Models.FiscalCodeModel.FiscalCode calcFiscalCode = new();
 
-                string fiscalCode = calcFiscalCode.SelectCode(pPerson);
+                string fiscalCode = calcFiscalCode.SelectCode(person);
 
                 Person result = new()
                 {
-                    Name = pPerson.Name,
-                    Surname = pPerson.Surname,
+                    Name = person.Name,
+                    Surname = person.Surname,
                     FiscalCode = fiscalCode,
-                    DateOfBirth = pPerson.DateOfBirth,
-                    City = pPerson.City,
-                    Gender = pPerson.Gender
+                    DateOfBirth = person.DateOfBirth,
+                    City = person.City,
+                    Gender = person.Gender
                 };
 
                 return new OkObjectResult(result);

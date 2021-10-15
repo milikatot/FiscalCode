@@ -35,16 +35,9 @@ namespace FiscalCode.Controllers
                 if (string.IsNullOrWhiteSpace(fiscalCode))
                     throw new ArgumentException("Parametri errati");
 
-                Models.FiscalCodeModel.FiscalCode calcFiscalCode = null;
-                string code = string.Empty;
-
-                if (!string.IsNullOrWhiteSpace(fiscalCode))
-                {
-                    calcFiscalCode = new Models.FiscalCodeModel.FiscalCode();
-                    code = fiscalCode;
-                }
-
-                Person person = calcFiscalCode.SelectPerson(code);
+                Models.FiscalCodeModel.FiscalCode calcFiscalCode = new();
+                
+                Person person = calcFiscalCode.SelectPerson(fiscalCode);
 
                 return new OkObjectResult(person);
             }

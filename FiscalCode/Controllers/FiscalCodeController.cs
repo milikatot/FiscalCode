@@ -57,7 +57,7 @@ namespace FiscalCode.Controllers
         {
             try
             {
-                var calcFiscalCode = new Models.FiscalCodeModel.FiscalCode();
+                Models.FiscalCodeModel.FiscalCode calcFiscalCode = new();
 
                 string fiscalCode = calcFiscalCode.SelectCode(pPerson);
 

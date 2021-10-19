@@ -1,13 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿#region Using
+using System.ComponentModel.DataAnnotations.Schema;
 
 using Newtonsoft.Json;
+#endregion
 
-namespace FiscalCode.Models.PersonModel
+namespace FiscalCode.Models.PersonViewModel
 {
     /// <summary>
     /// Model Info Città
     /// </summary>
-    public class City
+    public class CityModel
     {
         /// <summary>
         /// Codice comune contatto

@@ -1,17 +1,19 @@
-﻿using System;
+﻿#region Using
+using System;
 using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
 
 using FiscalCode.Generic;
-using FiscalCode.Models.PersonModel;
+using FiscalCode.Models.PersonViewModel;
+#endregion
 
-namespace FiscalCode.Models.FiscalCodeModel
+namespace FiscalCode.Models.FiscalCode
 {
     /// <summary>
     /// Classe per la gestione del codice fiscale
     /// </summary>
-    public class FiscalCode
+    public class FiscalCodeService : IFiscalCode
     {
         /// <summary>
         /// DB per il calcolo del codice fiscale
@@ -37,7 +39,7 @@ namespace FiscalCode.Models.FiscalCodeModel
         /// <summary>
         /// Classe per la gestione del codice fiscale
         /// </summary>
-        public FiscalCode()
+        public FiscalCodeService()
         {
             // Lettura dati da xml
             _data = new();
@@ -66,7 +68,7 @@ namespace FiscalCode.Models.FiscalCodeModel
         /// </summary>
         /// <param name="person">Dati della persona</param>
         /// <returns>Ritorna il codice fiscale</returns>
-        public string SelectCode(Person person)
+        public string SelectCode(PersonModel person)
         {
             // controllo dati della persona
             IsPersonCorrect(person);
@@ -97,7 +99,7 @@ namespace FiscalCode.Models.FiscalCodeModel
             tmpCodice.Append(codeDay.ToString("D2"));
 
             // codice città
-            City city = _function.GetCity(person.City.Name, person.City.Province);
+            CityModel city = _function.GetCity(person.City.Name, person.City.Province);
             tmpCodice.Append(city.Code);
 
             // carattere di controllo
@@ -112,7 +114,7 @@ namespace FiscalCode.Models.FiscalCodeModel
         /// </summary>
         /// <param name="person">Dati della persona</param>
         /// <returns></returns>
-        private static void IsPersonCorrect(Person person)
+        private static void IsPersonCorrect(PersonModel person)
         {
             if (string.IsNullOrWhiteSpace(person.Name))
                 throw new ArgumentException("Nome non presente");
@@ -136,7 +138,7 @@ namespace FiscalCode.Models.FiscalCodeModel
         /// </summary>
         /// <param name="fiscalCode">Codice fiscale da controllare</param>
         /// <returns></returns>
-        public Person SelectPerson(string fiscalCode)
+        public PersonModel SelectPerson(string fiscalCode)
         {
             string cfNoOmocodiciRegex = @"^[A-Z]{6}\d{2}" + _monthRegex + @"\d{2}[A-Z]\d{3}[A-Z]";
             string cfRegex = @"^[A-Z]{6}" + _omocodiciRegex + "{2}" + _monthRegex + _omocodiciRegex + "{2}[A-Z]" + _omocodiciRegex + "{3}[A-Z]";
@@ -188,9 +190,9 @@ namespace FiscalCode.Models.FiscalCodeModel
             if (numberDay > 40)
                 gender = GenderType.Female;
 
-            City city = _function.GetCity(aCodeNormalized.Substring(11, 4));
+            CityModel city = _function.GetCity(aCodeNormalized.Substring(11, 4));
 
-            return new Person()
+            return new PersonModel()
             {
                 Name = name,
                 Surname = surname,

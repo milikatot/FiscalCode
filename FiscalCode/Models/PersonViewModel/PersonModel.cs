@@ -1,17 +1,19 @@
-﻿using System;
+﻿#region Using
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Newtonsoft.Json;
 
 using FiscalCode.Generic;
 using FiscalCode.Formatter;
+#endregion
 
-namespace FiscalCode.Models.PersonModel
+namespace FiscalCode.Models.PersonViewModel
 {
     /// <summary>
     /// Model Info Persona
     /// </summary>
-    public class Person
+    public class PersonModel
     {
         /// <summary>
         /// Nome contatto
@@ -38,7 +40,7 @@ namespace FiscalCode.Models.PersonModel
         /// Comune contatto
         /// </summary>
         [NotMapped]
-        public City City { get; set; }
+        public CityModel City { get; set; }
         /// <summary>
         /// Provincia della città
         /// </summary>

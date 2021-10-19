@@ -1,3 +1,4 @@
+#region Using
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 
 using FiscalCode.Security;
+using FiscalCode.Models.FiscalCode;
+#endregion
 
 namespace FiscalCode
 {
@@ -31,6 +34,9 @@ namespace FiscalCode
                         builder.AllowAnyHeader();
                     });
             });
+
+            //Servizi Singleton
+            services.AddSingleton<IFiscalCode, FiscalCodeService>();
 
             services.AddControllers()
               .AddNewtonsoftJson(options =>

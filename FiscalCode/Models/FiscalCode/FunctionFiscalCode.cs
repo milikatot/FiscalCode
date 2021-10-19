@@ -1,11 +1,13 @@
-﻿using System;
+﻿#region Using
+using System;
 using System.Data;
 using System.Linq;
 using System.Text;
 
-using FiscalCode.Models.PersonModel;
+using FiscalCode.Models.PersonViewModel;
+#endregion
 
-namespace FiscalCode.Models.FiscalCodeModel
+namespace FiscalCode.Models.FiscalCode
 {
     /// <summary>
     /// Classe per la gestione delle funzioni per il calcolo del codice fiscale
@@ -191,7 +193,7 @@ namespace FiscalCode.Models.FiscalCodeModel
         /// </summary>
         /// <param name="codeCity">Codice comune</param>
         /// <returns>I dati della Città</returns>
-        public City GetCity(string codeCity)
+        public CityModel GetCity(string codeCity)
         {
             DataRow[] foundRows = _data.Tables["Comuni"].Select($"Codice = '{codeCity}'");
 
@@ -207,7 +209,7 @@ namespace FiscalCode.Models.FiscalCodeModel
         /// <param name="city">Comune</param>
         /// <param name="province">Porvincia</param>
         /// <returns>I dati della Città</returns>
-        public City GetCity(string city, string province)
+        public CityModel GetCity(string city, string province)
         {
             string aCity = city.Replace("'", "''");
             string aProvince = province.Replace("'", "''");
@@ -225,7 +227,7 @@ namespace FiscalCode.Models.FiscalCodeModel
         /// </summary>
         /// <param name="cityRow">Data row del db</param>
         /// <returns></returns>
-        private static City GetCity(DataRow cityRow)
+        private static CityModel GetCity(DataRow cityRow)
         {
             return new()
             {

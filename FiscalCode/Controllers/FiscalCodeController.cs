@@ -1,11 +1,11 @@
-﻿using System;
-using System.Reflection;
+﻿#region Using
+using System;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Configuration;
 
-using FiscalCode.Models.PersonModel;
+using FiscalCode.Models.FiscalCode;
+using FiscalCode.Models.PersonViewModel;
+#endregion
 
 namespace FiscalCode.Controllers
 {
@@ -17,10 +17,18 @@ namespace FiscalCode.Controllers
     public class FiscalCodeController : ControllerBase
     {
         /// <summary>
+        /// Servizio per il calcolo del codice fiscale
+        /// </summary>
+        private readonly IFiscalCode service;
+
+        /// <summary>
         /// Costruttore controller tabella "iva"
         /// </summary>
         /// <param name="pConfiguration">Parametro di configurazione controller</param>        
-        public FiscalCodeController(IConfiguration pConfiguration) { }
+        public FiscalCodeController(IFiscalCode fiscalCodeService) 
+        {
+            service = fiscalCodeService;
+        }
 
         /// <summary>
         /// Ritorna i dati della persona a partire dal codice fiscale o tessera sanitaria
@@ -34,16 +42,14 @@ namespace FiscalCode.Controllers
             {
                 if (string.IsNullOrWhiteSpace(fiscalCode))
                     throw new ArgumentException("Parametri errati");
+                                
+                PersonModel person = service.SelectPerson(fiscalCode);
 
-                Models.FiscalCodeModel.FiscalCode calcFiscalCode = new();
-                
-                Person person = calcFiscalCode.SelectPerson(fiscalCode);
-
-                return new OkObjectResult(person);
+                return Ok(person);
             }
             catch (Exception e)
             {
-                return new BadRequestObjectResult(new { error = e.Message });
+                return BadRequest(new { error = e.Message });
             }
         }
 
@@ -53,15 +59,13 @@ namespace FiscalCode.Controllers
         /// <param name="person">Persona corrente</param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] PersonModel person)
         {
             try
             {
-                Models.FiscalCodeModel.FiscalCode calcFiscalCode = new();
+                string fiscalCode = service.SelectCode(person);
 
-                string fiscalCode = calcFiscalCode.SelectCode(person);
-
-                Person result = new()
+                PersonModel result = new()
                 {
                     Name = person.Name,
                     Surname = person.Surname,
@@ -71,11 +75,11 @@ namespace FiscalCode.Controllers
                     Gender = person.Gender
                 };
 
-                return new OkObjectResult(result);
+                return Ok(result);
             }
             catch (Exception e)
             {
-                return new BadRequestObjectResult(new { error = e.Message });
+                return BadRequest(new { error = e.Message });
             }
         }
     }
